@@ -12,7 +12,7 @@ router.use('/protected', protectedRoutes)
 router.use('/unprotected', unprotectedRoutes)
 
 router.get('/', (req, res) => {
-    res.send("Hello World")
+    res.send({ status: 200, message: "Hello world!" })
 })
 
 module.exports = router

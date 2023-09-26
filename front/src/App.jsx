@@ -1,9 +1,10 @@
 import {
   BrowserRouter as Router,
   Switch,
-  Route,
-  NavLink
+  Route
 } from "react-router-dom";
+
+import Navbar from "./components/Navbar";
 
 // Routes
 import Home from './routes/Home';
@@ -14,32 +15,13 @@ import './App.css'
 import "../node_modules/bootstrap/dist/js/bootstrap.js"
 import Protected from "./routes/Protected";
 
+
 function App() {
 
   return (
     <Router>
       <div>
-        <nav className="navbar navbar-light bg-light border rounded px-3">
-          <NavLink
-            to="/" 
-            exact={true}
-            className="nav-link"
-            >Home
-          </NavLink>
-          <NavLink
-            to="/login" 
-            exact={true}
-            className="nav-link"
-            >Login
-          </NavLink>
-          <NavLink
-            to="/protected" 
-            exact={true}
-            className="nav-link"
-            >Protected
-          </NavLink>
-        </nav>
-
+        <Navbar/>
         {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
         <Switch>

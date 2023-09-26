@@ -17,18 +17,29 @@ auth.post('/register', async (req, res) => {
         )
 
         if (error) {
-            console.log(error)
+            res.send({ status: 500 })
         }
 
+        // verify if user doesn't already exist
+        let potentialUser = await getUserByEmail(email)
+        if (potentialUser) {
+            res.send({ 
+                status: 400,
+                message: "User already registered."
+            })
+            return
+        }
+
+        
         // create user
-        createdUser = await createUser(email, encrypted_password)
+        await createUser(email, encrypted_password)
 
         // send response
-        res.sendStatus(200)
+        res.send({ status: 200 })
 
     } catch(err) {
         console.log(err)
-        res.sendStatus(500)
+        res.send({ status: 500 })
     }
     
 })
@@ -66,7 +77,7 @@ auth.post('/login', async (req, res) => {
         }
 
         // send response
-        res.sendStatus(200)
+        res.send({ status: 200 })
 
     } catch(err) {
         console.log(err)

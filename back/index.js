@@ -5,7 +5,7 @@ require('dotenv').config()
 const express = require('express')
 const morgan = require('morgan')
 var session = require('express-session')
-var cors = require('express-cors')
+var cors = require('cors')
 
 const routes = require('./router');
 const { connectToDb } = require('./database')
@@ -27,18 +27,19 @@ async function main() {
         saveUninitialized: false,
         cookie: {
             maxAge: 1000 * 60 * 60,
-            httpOnly: false
+            httpOnly: false,
+            secure: false
         },
         store: sessionStore
       }))
     
-    // Routes
-    app.use('/', routes)
-
     // CORS
-    app.use(cors({
-        allowedOrigins: process.env.ALLOWED_ORIGINS.split(' ')
-    }))
+    var corsOptions = {
+        origin: process.env.ALLOWED_ORIGINS.split(' '),
+        methods: ['GET', 'POST'],
+        credentials: true
+    }
+    app.use(cors(corsOptions))
 
     // Database connection via ORM
     const sequelize = await connectToDb()
@@ -47,6 +48,9 @@ async function main() {
     // Database sync
     await sequelize.sync()
     console.log("Database Synced correctly")
+
+    // Routes
+    app.use('/', routes)
 
     // Server up
     app.listen(process.env.APP_PORT, () =>  {
