@@ -6,12 +6,6 @@ import { useDispatch } from 'react-redux'
 import { setCredentials } from '../slices/credentialsSlice'
 
 const SESSION_KEY = import.meta.env.VITE_SESSION_KEY
-
-/*
-  Important! without the following the session cookie will not be set
-*/
-axios.defaults.withCredentials = true 
-
 const API_URL = import.meta.env.VITE_API_URL
 
 const Login = () => {

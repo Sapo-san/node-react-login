@@ -12,12 +12,10 @@ export const credentialsSlice = createSlice({
   reducers: {
     setCredentials: (state, action) => {
       state.cookie = action.payload
-      console.log(document.cookie)
     },
     removeCredentials: (state) => {
       state.cookie = null
       Cookies.remove(SESSION_KEY)
-      console.log("logged out >>", document.cookie)
     },
   },
 })

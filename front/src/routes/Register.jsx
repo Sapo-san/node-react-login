@@ -22,7 +22,7 @@ const Register = () => {
     e.preventDefault()
 
     // Do register request
-    axios.post(API_URL + '/auth/login', {
+    axios.post(API_URL + '/auth/register', {
       email: userEmail,
       password: userPassword
     }, {
@@ -30,8 +30,7 @@ const Register = () => {
         'Content-Type': 'application/json', 
       }
     }).then(res => {
-      console.log(res.status)
-      history.push('/protected')
+      history.push('/login')
     }).catch(err => {
       console.log(err)
     })

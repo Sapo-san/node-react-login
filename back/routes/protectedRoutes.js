@@ -13,12 +13,14 @@ protectedRoutes.get('/', isAuthenticated, async (req, res) => {
 
     let currentUser = await getUserByEmail(req.session.user.email)
 
-    console.log(currentUser)
+    if (!currentUser) {
+        res.sendStatus(400)
+        return
+    }
 
     messages = [
         `Hello there, user with ID: ${currentUser.user_id}`,
-        `Your session expires at ${req.session.cookie._expires.toString()}`,
-        "👀"
+        `Your session expires at ${req.session.cookie._expires.toString()}`
     ]
 
     let index = Math.floor(Math.random() * messages.length);

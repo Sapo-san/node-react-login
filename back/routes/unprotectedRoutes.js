@@ -17,7 +17,7 @@ unprotectedRoutes.get('/', (req, res) => {
 
     let index = Math.floor(Math.random() * messages.length);
 
-    res.send({ status: 200, message: messages[index] })
+    res.send(messages[index])
 })
 
 module.exports = unprotectedRoutes

@@ -10,6 +10,14 @@ auth.post('/register', async (req, res) => {
         // get from body
         const { email, password } = req.body
 
+        // verify if user doesn't already exist
+        let potentialUser = await getUserByEmail(email)
+        if (potentialUser) {
+            console.log("User already registered.")
+            res.sendStatus(400)
+            return
+        }
+
         // encrypt password
         let error, encrypted_password = await bcrypt.hash(
             password,
@@ -17,29 +25,18 @@ auth.post('/register', async (req, res) => {
         )
 
         if (error) {
-            res.send({ status: 500 })
+            res.sendStatus(500)
         }
-
-        // verify if user doesn't already exist
-        let potentialUser = await getUserByEmail(email)
-        if (potentialUser) {
-            res.send({ 
-                status: 400,
-                message: "User already registered."
-            })
-            return
-        }
-
         
         // create user
         await createUser(email, encrypted_password)
 
         // send response
-        res.send({ status: 200 })
+        res.sendStatus(200)
 
     } catch(err) {
         console.log(err)
-        res.send({ status: 500 })
+        res.sendStatus(500)
     }
     
 })

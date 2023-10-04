@@ -28,7 +28,8 @@ async function main() {
         cookie: {
             maxAge: 1000 * 60 * 60,
             httpOnly: false,
-            secure: false
+            secure: false,
+            sameSite: "strict"
         },
         store: sessionStore
       }))
