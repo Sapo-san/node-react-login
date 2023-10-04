@@ -1,12 +1,6 @@
 import { useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import axios from 'axios'
-import Cookies from 'js-cookie'
-import { useDispatch } from 'react-redux'
-import { setCredentials } from '../slices/credentialsSlice'
-
-const SESSION_KEY = import.meta.env.VITE_SESSION_KEY
-
 /*
   Important! without the following the session cookie will not be set
 */
@@ -14,11 +8,8 @@ axios.defaults.withCredentials = true
 
 const API_URL = import.meta.env.VITE_API_URL
 
-const Login = () => {
-  // Redux State
-  const dispatch = useDispatch()
-  
-  // Component State
+const Register = () => {
+  // State
   const [userEmail, setUserEmail] = useState()
   const [userPassword, setUserPassword] = useState()
 
@@ -30,7 +21,7 @@ const Login = () => {
     // Prevent page refresh
     e.preventDefault()
 
-    // Do login request
+    // Do register request
     axios.post(API_URL + '/auth/login', {
       email: userEmail,
       password: userPassword
@@ -39,8 +30,7 @@ const Login = () => {
         'Content-Type': 'application/json', 
       }
     }).then(res => {
-      // if login is successful, session cookie has been set
-      dispatch(setCredentials(Cookies.get(SESSION_KEY)))
+      console.log(res.status)
       history.push('/protected')
     }).catch(err => {
       console.log(err)
@@ -51,7 +41,7 @@ const Login = () => {
 
   return (
     <div className='border rounded m-3'>
-        <h1 className='mt-4'>Log in</h1>
+        <h1 className='mt-4'>Register</h1>
         <form className='container-fluid text-start p-3'>
             <div className="mb-3">
                 <label htmlFor="exampleInputEmail1" className="form-label">Email address</label>
@@ -72,10 +62,10 @@ const Login = () => {
                   onChange={(e) => setUserPassword(e.target.value)}
                   />
             </div>
-            <button type="submit" onClick={loginSubmit} className="btn btn-primary">Submit</button>
-        </form>
+            <button type="submit" onClick={loginSubmit} className="btn btn-primary">Register</button>
+            </form>
     </div>
   )
 }
 
-export default Login
+export default Register

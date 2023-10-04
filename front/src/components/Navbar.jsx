@@ -1,20 +1,26 @@
 import { NavLink, useHistory } from 'react-router-dom'
 import Cookies from 'js-cookie'
 import axios from 'axios'
+import { useSelector, useDispatch } from 'react-redux'
+import { removeCredentials } from '../slices/credentialsSlice'
 
 const API_URL = import.meta.env.VITE_API_URL
-const SESSION_KEY = import.meta.env.VITE_SESSION_KEY
 
 
 const Navbar = () => {
+    // Redux state
+    const credentials = useSelector((state) => state.credentials.cookie)
+    const dispatch = useDispatch()
+
+    // Redirect
     const history = useHistory()
 
     const sendLogOutRequest = async () => {
         try {
             let res = await axios.get(API_URL + '/auth/logout')
             if (res.status === 200) {
+                dispatch(removeCredentials())
                 history.push('/home')
-                Cookies.remove(SESSION_KEY)
             }
             
         } catch(err) {
@@ -22,14 +28,35 @@ const Navbar = () => {
         }
     }
 
-    const showLoginOrLogOut = () => {
-        if (!Cookies.get(SESSION_KEY)) { // No session cookie
+    const showProtectedRoute = () => {
+        if (credentials) {
             return <NavLink
-                to="/login" 
+                to="/protected" 
                 exact={true}
                 className="nav-link">
-                    Login
+                    Protected
             </NavLink>
+        }
+         return <></>
+    }
+
+    const showLoginOrLogOut = () => {
+        
+        if (!credentials) { // No session cookie
+            return <div className='d-flex flex-row'>
+                    <NavLink
+                        to="/login" 
+                        exact={true}
+                        className="nav-link">
+                            Login
+                    </NavLink>
+                    <NavLink
+                        to="/register" 
+                        exact={true}
+                        className="nav-link ms-3">
+                            Register
+                    </NavLink>
+                </div>
         } else { // Session Cookie
             return <a 
                 href='/home'
@@ -52,12 +79,7 @@ const Navbar = () => {
                 Home
         </NavLink>
         
-        <NavLink
-            to="/protected" 
-            exact={true}
-            className="nav-link">
-                Protected
-        </NavLink>
+        {showProtectedRoute()}
 
         {showLoginOrLogOut()}
 </nav>

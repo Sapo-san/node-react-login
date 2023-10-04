@@ -9,18 +9,20 @@ import Navbar from "./components/Navbar";
 // Routes
 import Home from './routes/Home';
 import Login from "./routes/Login";
+import Register from "./routes/Register";
+import Protected from "./routes/Protected";
 
 // Bootstrap
 import './App.css'
 import "../node_modules/bootstrap/dist/js/bootstrap.js"
-import Protected from "./routes/Protected";
 
+// Middleware
+import PrivateRoute from "./middleware/PrivateRoute";
 
 function App() {
 
   return (
     <Router>
-      <div>
         <Navbar/>
         {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
@@ -28,14 +30,16 @@ function App() {
           <Route path="/login">
             <Login/>
           </Route>
-          <Route path="/protected">
-            <Protected/>
+          <Route path="/register">
+            <Register/>
           </Route>
+
+          <PrivateRoute path="/protected" component={Protected} />
+
           <Route path="/">
             <Home/>
           </Route>
         </Switch>
-      </div>
     </Router>
   )
 }
